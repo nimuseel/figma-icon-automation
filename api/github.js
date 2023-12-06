@@ -1,72 +1,105 @@
-export const base = 'https://api.github.com'
+export const base = "https://api.github.com";
 
 export const getContent = (filePath, githubData) => {
-  return fetch(`${base}/repos/${githubData.owner}/${githubData.name}/contents/${filePath}`, {
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': `token ${githubData.githubToken}`
+  // `${base}/repos/${githubData.owner}/${githubData.name}/contents/${filePath}`
+  return fetch(
+    `https://api.github.com/repos/lemonbase-tech/packages/contents/packages/untitled-icon/package.json\?ref\=main`,
+
+    {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `token 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`,
+      },
     }
-  })
-  .then(response => response.json())
-  .then(res => (
-    res.sha ?
-    {sha: res.sha, contents: JSON.parse(window.atob(res.content))} :
-    {}
-  ))
-}
+  )
+    .then((response) => response.json())
+    .then((res) =>
+      res.sha
+        ? { sha: res.sha, contents: JSON.parse(window.atob(res.content)) }
+        : {}
+    );
+};
 
 export const getCommit = (githubData) => {
-  return fetch(`${base}/repos/${githubData.owner}/${githubData.name}/commits/refs/heads/master`, {
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': `token ${githubData.githubToken}`
+  // `${base}/repos/${githubData.owner}/${githubData.name}/commits/refs/heads/master`
+  return fetch(
+    `https://api.github.com/repos/lemonbase-tech/packages/commits/refs/heads/main`,
+    {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `token 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`,
+      },
     }
-  })
-  .then(response => response.json())
-}
+  ).then((response) => response.json());
+};
 
 export const createBranch = (sha, githubData) => {
-  const branchName = `figma-update-${(new Date()).getTime()}`
-  const body = { ref: `refs/heads/${branchName}`, sha }
-  return fetch(`${base}/repos/${githubData.owner}/${githubData.name}/git/refs`, {
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': `token ${githubData.githubToken}`
-    },
-    body: JSON.stringify(body),
-    method: 'POST'
-  })
-    .then(response => response.json())
-}
+  const branchName = `figma-update-${new Date().getTime()}`;
+  const body = { ref: `refs/heads/${branchName}`, sha };
+  // `${base}/repos/${githubData.owner}/${githubData.name}/git/refs`
+  // POST /repos/:user/:repo/git/refs
+  //
+  return fetch(
+    `https://api.github.com/repos/lemonbase-tech/packages/git/refs`,
+    {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `token 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`,
+      },
+      body: JSON.stringify(body),
+      method: "POST",
+    }
+  ).then((response) => response.json());
+};
 
 export const updatePackage = (message, sha, contents, branch, githubData) => {
-  const content = window.btoa(JSON.stringify(contents, null, 2))
-  const body = JSON.stringify({ branch, sha, content, message })
-  return fetch(`${base}/repos/${githubData.owner}/${githubData.name}/contents/package.json`, {
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': `token ${githubData.githubToken}`
-    },
-    body,
-    method: 'PUT'
-  })
-  .then(response => response.json())
-}
+  const content = window.btoa(JSON.stringify(contents, null, 2));
+  const body = JSON.stringify({ branch, sha, content, message });
+  // `${base}/repos/${githubData.owner}/${githubData.name}/contents/package.json`
+  return fetch(
+    `https://api.github.com/repos/lemonbase-tech/packages/contents/packages/untitled-icon/package.json\?ref\=main`,
+    {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `token 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`,
+      },
+      body,
+      method: "PUT",
+    }
+  ).then((response) => response.json());
+};
 
 export const createPullRequest = (title, content, branchName, githubData) => {
   const body = {
     title,
     body: content,
     head: `${githubData.owner}:${branchName}`,
-    base: "master"
-  }
-  return fetch(`${base}/repos/${githubData.owner}/${githubData.name}/pulls`, {
+    base: "main",
+  };
+  // `${base}/repos/${githubData.owner}/${githubData.name}/pulls`
+  return fetch(`https://api.github.com/repos/lemonbase-tech/packages/pulls`, {
     headers: {
-      'content-type': 'application/json',
-      'Authorization': `token ${githubData.githubToken}`
+      "content-type": "application/json",
+      Authorization: `token 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`,
     },
     body: JSON.stringify(body),
-    method: 'POST'
-  })
-    .then(response => response.json())
-}
+    method: "POST",
+  }).then((response) => response.json());
+};
+
+export const createSVG = (content) => {
+  // /repos/{owner}/{repo}/contents/{path}
+  return fetch(
+    `https://api.github.com/repos/lemonbase-tech/packages/contents/untitled-icon`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `token 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`,
+      },
+      body: JSON.stringify({
+        content,
+        encoding: "utf-8",
+      }),
+    }
+  ).then((response) => response.json());
+};
