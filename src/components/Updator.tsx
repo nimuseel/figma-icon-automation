@@ -6,7 +6,7 @@ import {
   updatePackage,
   createPullRequest,
   createBranch,
-  createBlob,
+  createSVG,
 } from "../../api/github";
 import { sendNotification } from "../../api/webhook";
 import { versionValue } from "../../utils/helper";
@@ -137,14 +137,15 @@ export default class Settings extends React.Component<Props> {
 
         console.log(svgs);
 
-        // const blobs = svgs.map(async (svg) => {
-        //   const response = await createBlob(svg);
-        //   console.log(
-        //     "🚀 ~ file: Updator.tsx:131 ~ Settings ~ svgBlobs ~ response:",
-        //     response
-        //   );
-        // });
-        // console.log(blobs);
+        const blobs = async () => {
+          const response = await createSVG(svgs);
+          console.log(
+            "🚀 ~ file: Updator.tsx:142 ~ Settings ~ blobs ~ response:",
+            response
+          );
+        };
+
+        console.log(blobs());
 
         // const svgBlobs = await Promise.all(
         //   nodes.map(async ({ id, name }) => {

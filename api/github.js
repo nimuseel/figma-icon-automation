@@ -1,4 +1,5 @@
 export const base = "https://api.github.com";
+const github_token = process.env.GITHUB_TOKEN || "";
 
 export const getContent = (filePath, githubData) => {
   // `${base}/repos/${githubData.owner}/${githubData.name}/contents/${filePath}`
@@ -8,7 +9,7 @@ export const getContent = (filePath, githubData) => {
     {
       headers: {
         "content-type": "application/json",
-        Authorization: `token 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`,
+        Authorization: `token ${github_token}`,
       },
     }
   )
@@ -27,7 +28,7 @@ export const getCommit = (githubData) => {
     {
       headers: {
         "content-type": "application/json",
-        Authorization: `token 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`,
+        Authorization: `token ${github_token}`,
       },
     }
   ).then((response) => response.json());
@@ -44,7 +45,7 @@ export const createBranch = (sha, githubData) => {
     {
       headers: {
         "content-type": "application/json",
-        Authorization: `token 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`,
+        Authorization: `token ${github_token}`,
       },
       body: JSON.stringify(body),
       method: "POST",
@@ -61,7 +62,7 @@ export const updatePackage = (message, sha, contents, branch, githubData) => {
     {
       headers: {
         "content-type": "application/json",
-        Authorization: `token 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`,
+        Authorization: `token ${github_token}`,
       },
       body,
       method: "PUT",
@@ -80,7 +81,7 @@ export const createPullRequest = (title, content, branchName, githubData) => {
   return fetch(`https://api.github.com/repos/lemonbase-tech/packages/pulls`, {
     headers: {
       "content-type": "application/json",
-      Authorization: `token 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`,
+      Authorization: `token ${github_token}`,
     },
     body: JSON.stringify(body),
     method: "POST",
@@ -94,7 +95,7 @@ export const createSVG = (content) => {
     {
       method: "PUT",
       headers: {
-        Authorization: `token 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`,
+        Authorization: `token ${github_token}`,
       },
       body: JSON.stringify({
         content,

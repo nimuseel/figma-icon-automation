@@ -6,7 +6,7 @@ export const getSvg = async (params: { fileKey: string; ids: string }) => {
     `${BASE_URL}/images/${fileKey}?ids=${ids}&format=svg`,
     {
       headers: {
-        "X-Figma-Token": "figd_ru3BOMc3WT1q0HmcU37CUm_wQwgViVD9fQldH4a9",
+        "X-Figma-Token": process.env.FIGMA_TOKEN || "",
       },
     }
   );
